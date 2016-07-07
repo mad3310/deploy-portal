@@ -1,0 +1,7 @@
+{
+  "pythonHost":"http://10.11.147.153:80",
+  "webHost":"http://127.0.0.1:2000",
+  "resourcesHost":"http://127.0.0.1:1000",
+  "pythonPathHeader":"/v1/cloud",
+  "cookieTime":9000
+}
