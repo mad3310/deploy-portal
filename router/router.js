@@ -6,8 +6,10 @@ var fs = require('fs');
 var http = require('http');
 var ejs = require('ejs');
 var path = require('path');
-var cookie = require('cookie');
-var common = require('../common/common.js');
+var bodyParser = require('body-parser');
+var common = require('../common/util.js');
+
+
 
 var config=JSON.parse(fs.readFileSync(__dirname+'/../common/config.json'));
 var route = express.Router();
@@ -15,10 +17,14 @@ var proxy = httpProxy.createProxyServer({});
 var clientId = "";
 var clientSecret = "";
 
+
+route.use(bodyParser.urlencoded({ extended: false }))
+// parse application/json
+route.use(bodyParser.json())
+
 route.use(function (req, res, next) {
 	var ext = path.extname(req.path);
 	ext = ext ? ext.slice(1) : 'unknown';
-
 	if(ext==='unknown'){
 		next();
 	}else{
@@ -101,7 +107,6 @@ route.get('/identification/code',function(req, res, next){
 route.get('/user',function(req, res){
 	var userName = common.getCookie("username",req);
 	var token = common.getCookie("token",req);
-
 	var obj = {
 		data:{
 			"username":userName
@@ -131,7 +136,7 @@ route.get('/user/logout',function(req, res){
 	res.send(obj);
 });
 
-//获取仓库列表
+//获取仓库列表(查看镜像group 列表)
 route.get('/imagegroups',function(req, res){
 	var userName = common.getCookie("username",req);
 	var token = common.getCookie("token",req);
@@ -159,15 +164,82 @@ route.get('/imagegroups',function(req, res){
 
 });
 
-//创建创库
-route.post('/test',function(req, res){
-
-	console.log(req);
-	//res.json(req.body);
-
-	res.send("end");
-
+//创建创库(创建镜像group)
+route.post('/imagegroups',function(req, res){
+	var userName = common.getCookie("username",req);
+	var token = common.getCookie("token",req);
+	var httpObj = {
+		method: "post",
+		uri: config.pythonHost+'/v1/cloud/imagegroups',
+		headers:
+		{
+			"username": userName,
+			"accesstoken": token
+		},
+		body:JSON.stringify(req.body)
+	};
+	common.sendHttpRequest(httpObj, function(body){
+		var obj = {
+			data:body,
+			callback:null,
+			msgs:[],
+			alertMessage:null,
+			result:1
+		}
+		res.send(obj);
+	});
 });
 
+//修改仓库信息(修改镜像group 信息)
+route.put('/imagegroups/:imagegroupid',function(req, res){
+	var userName = common.getCookie("username",req);
+	var token = common.getCookie("token",req);
+	var httpObj = {
+		method: "post",
+		uri: config.pythonHost+'/v1/cloud/imagegroups/'+req.params.imagegroupid,
+		headers:
+		{
+			"username": userName,
+			"accesstoken": token
+		},
+		body:JSON.stringify(req.body)
+	};
+	common.sendHttpRequest(httpObj, function(body){
+		var obj = {
+			data:body,
+			callback:null,
+			msgs:[],
+			alertMessage:null,
+			result:1
+		}
+		res.send(obj);
+	});
+});
+
+//查看仓库信息(查看镜像group 信息)
+route.get('/imagegroups/:imagegroupid',function(req, res){
+	var userName = common.getCookie("username",req);
+	var token = common.getCookie("token",req);
+	var httpObj = {
+		method: "post",
+		uri: config.pythonHost+'/v1/cloud/imagegroups/'+req.params.imagegroupid,
+		headers:
+		{
+			"username": userName,
+			"accesstoken": token
+		},
+		body:JSON.stringify(req.body)
+	};
+	common.sendHttpRequest(httpObj, function(body){
+		var obj = {
+			data:body,
+			callback:null,
+			msgs:[],
+			alertMessage:null,
+			result:1
+		}
+		res.send(obj);
+	});
+});
 
 module.exports = route;
