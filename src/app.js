@@ -1,7 +1,7 @@
 var express = require('express');
 var fs = require('fs');
 var leEngineRouter = require('./api-proxy');
-var oauthRouter = require('./oauth');
+var oauthRouter = require('./auth');
 
 var config=JSON.parse(fs.readFileSync(__dirname+'/config.json'));
 
