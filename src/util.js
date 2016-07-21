@@ -1,6 +1,5 @@
 var request = require('request');
 var cookie = require('cookie');
-var signature = require('cookie-signature');
 
 var sendHttpRequest = function(httpObj, callBack){
     request(httpObj, function (error, response, body) {
