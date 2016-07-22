@@ -63,7 +63,7 @@ route.get('/identification/code',function(req, res, next){
 
         var httpObj = {
             method: "post",
-            uri: config.pythonHost + '/v1/cloud/users/login',
+            uri: config.backendHost + '/v1/cloud/users/login',
             headers:
             {
                 "username": username,
@@ -77,8 +77,8 @@ route.get('/identification/code',function(req, res, next){
         };
 
         common.sendHttpRequest(httpObj, function(body){
-            res.cookie('username',username, { maxAge: config.cookieTime });
-            res.cookie('token', body.Details.AccessToken, { maxAge: config.cookieTime });
+            res.cookie('username', username, { expires: new Date(Date.now() + config.cookieTime), httpOnly: true });
+            res.cookie('token', body.Details.AccessToken, { expires: new Date(Date.now() + config.cookieTime), httpOnly: true });
             res.redirect(config.webHost);
         });
     }

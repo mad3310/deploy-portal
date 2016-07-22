@@ -29,17 +29,16 @@ function leEngineCallBack(req, res){
     var userName = common.getCookie("username",req);
     var token = common.getCookie("token",req);
     var pathName = req.pathname;
-    var optionObj = req.method=="GET"?req.query:req.body;
 
     var httpObj = {
         method: req.method,
-        uri: config.pythonHost+'/v1/cloud'+req.path,
+        uri: config.backendHost + req.originalUrl,
         headers:
         {
             "username": userName,
             "accesstoken": token
         },
-        body:JSON.stringify(optionObj)
+        body:JSON.stringify(req.body)
     };
     common.sendHttpRequest(httpObj, function(body){
         var obj = {

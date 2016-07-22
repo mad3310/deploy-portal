@@ -8,12 +8,14 @@ var sendHttpRequest = function(httpObj, callBack){
                     return;
                 }
                 var objBody = JSON.parse(body);
+
                 callBack(objBody);
             }
         );
 }
 
 var getCookie = function(key,req){
+
     if(req.headers.cookie) {
         var cookieObj = cookie.parse(req.headers.cookie);
         if(cookieObj[key])return cookieObj[key];
