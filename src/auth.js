@@ -63,7 +63,7 @@ route.get('/identification/code',function(req, res, next){
 
         var httpObj = {
             method: "post",
-            uri: config.pythonHost + '/v1/cloud/users/login',
+            uri: config.backendHost + '/v1/cloud/users/login',
             headers:
             {
                 "username": username,

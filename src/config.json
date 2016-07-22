@@ -1,7 +1,7 @@
 {
-  "pythonHost":"http://10.11.147.153:80",
+  "backendHost":"http://10.11.147.153:80",
   "webHost":"http://127.0.0.1:80",
-  "frontSrcPath":"/usr/local/node/front/src",
+  "frontSrcPath":"E:\\frontwork\\lecloud_matrix_fe\\src",
   "oauthHost":"https://oauth.lecloud.com",
   "cookieTime":9000000
 }
