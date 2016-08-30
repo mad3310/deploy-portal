@@ -1,5 +1,5 @@
 {
-  "backendHost":"http://10.11.147.153:80",
+  "backendHost":"http://10.11.147.153:8080",
   "webHost":"http://127.0.0.1:80",
   "frontSrcPath":"E:\\frontwork\\lecloud_matrix_fe\\src",
   "oauthHost":"https://oauth.lecloud.com",
