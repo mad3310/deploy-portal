@@ -118,4 +118,34 @@ route.get('/user/logout',function(req, res){
     });
 });
 
+//获取脚本文件信息
+route.get('/shell',function(req, res){
+    var type = req.param('type');
+    var filePath = __dirname+"/shell";
+    if(type=='compile'){
+        filePath += "/compile-init-shell.txt"
+    }else if(type=='dockfile'){
+        filePath += "/dockfile-init-shell.txt"
+    }else if(type=='health-check'){
+        filePath += "/health-check-init-shell.txt"
+    }else if(type=='service-start'){
+        filePath += "/service-start-init-shell.txt"
+    }else{
+    }
+
+    fs.readFile(filePath,function(err,data){
+        if (err) {
+            return console.error(err);
+        };
+        var obj = {
+            data:{file:data.toString()},
+            callback:null,
+            msgs:[],
+            alertMessage:null,
+            result:1
+        }
+        res.send(obj);
+    });
+});
+
 module.exports = route;
