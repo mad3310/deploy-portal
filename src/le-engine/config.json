@@ -1,7 +1,8 @@
 {
-  "backendHost":"http://10.11.147.153:8080",
+  "backendHost":"https://pre-bj-core-leengine.lecloud.com",
   "webHost":"http://127.0.0.1:80",
   "frontSrcPath":"E:\\frontwork\\lecloud_matrix_fe\\src",
   "oauthHost":"https://oauth.lecloud.com",
+  "logintoken":"pre_leengine",
   "cookieTime":9000000
 }

@@ -1,0 +1,9 @@
+# 允许书写的Dockerfile 关键字只有: RUN 和 ENV
+# RUN 命令:  安装服务启动所需要的依赖
+# ENV 命令： 定义环境变量
+# 实例
+
+RUN  yum install vim -y
+RUN  yum install nc -y
+RUN  yum install nmap -y
+ENV  MYSQL  127.0.0.1:3306

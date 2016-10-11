@@ -3,7 +3,7 @@ var request = require('request');
 var fs = require('fs');
 var ejs = require('ejs');
 var bodyParser = require('body-parser');
-var common = require('./util.js');
+var common = require('../common/util.js');
 
 
 var config = JSON.parse(fs.readFileSync(__dirname+'/config.json'));
@@ -49,42 +49,47 @@ route.get('/identification',function(req, res, next){
 route.get('/identification/code',function(req, res, next){
     var code = req.param('code');
     var url = config.oauthHost+"/accesstoken?grant_type=authorization_code&code="+code+"&client_id="+clientId+"&client_secret="+clientSecret+"&redirect_uri=http://127.0.0.1/unused";
+
     request(url, callBackAccessToken);
 
     function callBackAccessToken(error, response, body){
         var access_token = JSON.parse(body)["access_token"];
         var url = config.oauthHost+"/userdetailinfo?access_token="+access_token;
+
         request(url, callBackDetailInfo);
     }
 
     function callBackDetailInfo(error, response, body){
         var username = JSON.parse(body)["username"];
-        var email = JSON.parse(body)["email"];
+        var usersource = JSON.parse(body)["usersource"];
 
-        var httpObj = {
-            method: "post",
-            uri: config.backendHost + '/v1/cloud/users/login',
-            headers:
-            {
-                "username": username,
-                "logintoken": "cloud_leengine",
-                "clientaddr": userIp
-            },
-            body:JSON.stringify({
-                "Email":email,
-                "Name":username
-            })
-        };
+        if(usersource!=1){
+            res.send("现阶段只允许乐视网内部用户访问，请点击内网用户登录，输入您的邮箱前缀和密码");
+        }else {
+            var httpObj = {
+                method: "get",
+                uri: config.backendHost + '/v1/admin/users/login?username='+username,
+                headers: {
+                    "username": username,
+                    "logintoken":config.logintoken,
+                    "clientaddr": userIp
+                },
+                body: JSON.stringify({
+                    "username": username
+                })
+            };
 
-        common.sendHttpRequest(httpObj, function(body){
-            console.log(body);
-            res.cookie('username', username, { expires: new Date(Date.now() + config.cookieTime), httpOnly: true });
-            res.cookie('token', body.Details.AccessToken, { expires: new Date(Date.now() + config.cookieTime), httpOnly: true });
-            res.redirect(config.webHost);
-        });
+            common.sendHttpRequest(httpObj, function (body) {
+                res.cookie('username', username, {expires: new Date(Date.now() + config.cookieTime), httpOnly: true});
+                res.cookie('token', body.Details.AdminToken, {
+                    expires: new Date(Date.now() + config.cookieTime),
+                    httpOnly: true
+                });
+                res.redirect(config.webHost);
+            });
+        }
     }
 });
-
 
 //获取用户信息
 route.get('/user',function(req, res){
@@ -118,5 +123,51 @@ route.get('/user/logout',function(req, res){
         res.send(obj);
     });
 });
+
+//获取脚本文件信息
+route.get('/shell',function(req, res){
+    var type = req.param('type');
+    var filePath = __dirname+"/shell";
+    if(type=='compile'){
+        filePath += "/compile-init-shell.sh"
+    }else if(type=='dockfile'){
+        filePath += "/dockfile-init-shell.sh"
+    }else if(type=='health-check'){
+        filePath += "/health-check-init-shell.sh"
+    }else if(type=='service-start'){
+        filePath += "/service-start-init-shell.sh"
+    }else{
+    }
+
+    fs.readFile(filePath,function(err,data){
+        if (err) {
+            return console.error(err);
+        };
+        var obj = {
+            data:{file:data.toString()},
+            callback:null,
+            msgs:[],
+            alertMessage:null,
+            result:1
+        }
+        res.send(obj);
+    });
+});
+
+//获取backendHost值
+route.get('/backendhost',function(req, res){
+    var backendHost = config.backendHost;
+    var obj = {
+        data:{
+            "backendhost":backendHost
+        },
+        callback:null,
+        msgs:[],
+        alertMessage:null,
+        result:1
+    }
+    res.send(obj);
+});
+
 
 module.exports = route;

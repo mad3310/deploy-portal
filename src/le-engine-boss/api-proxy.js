@@ -6,7 +6,7 @@ var httpProxy = require('http-proxy');
 var fs = require('fs');
 var path = require('path');
 var bodyParser = require('body-parser');
-var common = require('./util.js');
+var common = require('../common/util.js');
 
 var config=JSON.parse(fs.readFileSync(__dirname+'/config.json'));
 var route = express.Router();
@@ -25,6 +25,7 @@ route.use(function (req, res, next) {
     }
 });
 
+
 function leEngineCallBack(req, res){
     var userName = common.getCookie("username",req);
     var token = common.getCookie("token",req);
@@ -33,26 +34,22 @@ function leEngineCallBack(req, res){
     var httpObj = {
         method: req.method,
         uri: config.backendHost + req.originalUrl,
-        headers:
-        {
+        headers: {
             "username": userName,
-            "accesstoken": token
+            "admintoken": token
         },
-        body:JSON.stringify(req.body)
+        body: JSON.stringify(req.body)
     };
-    common.sendHttpRequest(httpObj, function(body){
-        if(body.Message==="accesstoken is invalid"){//µÇÂ¼³¬Ê±
-            res.redirect(config.webHost);
-        }else{
-            var obj = {
-                data:body,
-                callback:null,
-                msgs:[],
-                alertMessage:null,
-                result:1
-            }
-            res.send(obj);
+    common.sendHttpRequest(httpObj, function (body) {
+        var obj = {
+            data: body,
+            callback: null,
+            msgs: [],
+            alertMessage: null,
+            cookieLost:(!userName||!token)?1:0,
+            result: 1
         }
+        res.send(obj);
     });
 }
 
