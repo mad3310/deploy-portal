@@ -24,18 +24,24 @@ route.get('/',function(req, res, next){
         userIp = req.ip;
         res.redirect(config.oauthHost+"/index?redirect_uri="+config.webHost+"/identification");
     }else{//已登录
-        fs.readFile(__dirname+"/index.ejs",function(err,data){
-            if (err) {
-                return console.error(err);
-            };
-            var template = data.toString();
-            var dictionary = {
-                name:6
-            };
-            var html = ejs.render(template,dictionary);
-            res.writeHead(200,{"Content-Type":"text/html;charset=UTF8"});
-            res.end(html);
-        });
+
+        if(!req.query.lang){//默认语言版本
+            res.redirect(config.webHost+"/?lang="+config.defaultLang);
+        }else{
+            fs.readFile(__dirname+"/index.ejs",function(err,data){
+                if (err) {
+                    return console.error(err);
+                };
+                var template = data.toString();
+                var dictionary = {
+                    lang:req.query.lang
+                };
+                var html = ejs.render(template,dictionary);
+                res.writeHead(200,{"Content-Type":"text/html;charset=UTF8"});
+                res.end(html);
+            });
+        }
+
     }
 });
 

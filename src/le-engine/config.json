@@ -4,5 +4,6 @@
   "frontSrcPath":"E:\\frontwork\\lecloud_matrix_fe\\src",
   "oauthHost":"https://oauth.lecloud.com",
   "logintoken":"pre_leengine",
+  "defaultLang":"zh-cn",
   "cookieTime":9000000
 }
