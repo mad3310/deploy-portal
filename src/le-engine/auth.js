@@ -5,8 +5,7 @@ var ejs = require('ejs');
 var bodyParser = require('body-parser');
 var common = require('../common/util.js');
 
-
-var config = JSON.parse(fs.readFileSync(__dirname+'/config.json'));
+var config = JSON.parse(fs.readFileSync(global.configPath));
 var route = express.Router();
 var clientId = "";
 var clientSecret = "";
@@ -15,8 +14,9 @@ var userIp = "";
 route.use(bodyParser.urlencoded({ extended: false }));
 route.use(bodyParser.json());
 
-
 route.get('/',function(req, res, next){
+
+
     var userName = common.getCookie("username",req);
     var token = common.getCookie("token",req);
 
@@ -24,11 +24,22 @@ route.get('/',function(req, res, next){
         userIp = req.ip;
         res.redirect(config.oauthHost+"/index?redirect_uri="+config.webHost+"/identification");
     }else{//已登录
+        var langArray = req.acceptsLanguages(req['accept-language']);
+        if(langArray && langArray.length>0){
+            var defaultLang = langArray[0].substr(0,2);
+            if(defaultLang=="en"){
+                defaultLang = 'en-us';
+            }else{
+                defaultLang = 'zh-cn';
+            }
+        }else{
+            var defaultLang = config.defaultLang;
+        }
 
         if(!req.query.lang){//默认语言版本
-            res.redirect(config.webHost+"/?lang="+config.defaultLang);
+            res.redirect(config.webHost+"/?lang="+defaultLang);
         }else{
-            fs.readFile(__dirname+"/index.ejs",function(err,data){
+            fs.readFile(config.frontSrcPath+"/indexs/le-engine/index.ejs",function(err,data){
                 if (err) {
                     return console.error(err);
                 };
@@ -67,9 +78,6 @@ route.get('/identification/code',function(req, res, next){
         var username = JSON.parse(body)["username"];
         var email = JSON.parse(body)["email"];
         var usersource = JSON.parse(body)["usersource"];
-
-        console.log(body);
-
         if(usersource!=1){
             res.send("现阶段只允许乐视网内部用户访问，请点击内网用户登录，输入您的邮箱前缀和密码");
         }else {
@@ -86,7 +94,6 @@ route.get('/identification/code',function(req, res, next){
                     "Name": username
                 })
             };
-
             common.sendHttpRequest(httpObj, function (body) {
                 res.cookie('username', username, {expires: new Date(Date.now() + config.cookieTime), httpOnly: true});
                 res.cookie('token', body.Details.AccessToken, {

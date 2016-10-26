@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 var common = require('../common/util.js');
 
 
-var config = JSON.parse(fs.readFileSync(__dirname+'/config.json'));
+var config = JSON.parse(fs.readFileSync(global.configPath));
 var route = express.Router();
 var clientId = "";
 var clientSecret = "";
@@ -24,7 +24,7 @@ route.get('/',function(req, res, next){
         userIp = req.ip;
         res.redirect(config.oauthHost+"/index?redirect_uri="+config.webHost+"/identification");
     }else{//已登录
-        fs.readFile(__dirname+"/index.ejs",function(err,data){
+        fs.readFile(config.frontSrcPath + "/index.ejs",function(err,data){
             if (err) {
                 return console.error(err);
             };
