@@ -19,6 +19,6 @@ app.use("/",leEngineRouter);
 
 app.use(express.static(config.frontSrcPath));
 
-app.listen(80);
+app.listen(config.webPort);
 
 console.log("web start success!!!");
