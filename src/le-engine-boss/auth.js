@@ -104,12 +104,12 @@ route.get('/identification/code',function(req, res, next){
                         expires: new Date(Date.now() + config.cookieTime),
                         httpOnly: true
                     });
-                    res.redirect(config.webHost);
+                    res.redirect(webUrl);
                 } else {
                     console.log(body);
                     res.send(body.Message);
                 }
-                
+
             });
         }
     }
