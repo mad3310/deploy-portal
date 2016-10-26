@@ -87,12 +87,29 @@ route.get('/identification/code',function(req, res, next){
             };
 
             common.sendHttpRequest(httpObj, function (body) {
-                res.cookie('username', username, {expires: new Date(Date.now() + config.cookieTime), httpOnly: true});
-                res.cookie('token', body.Details.AdminToken, {
-                    expires: new Date(Date.now() + config.cookieTime),
-                    httpOnly: true
-                });
-                res.redirect(webUrl);
+                // res.cookie('username', username, {expires: new Date(Date.now() + config.cookieTime), httpOnly: true});
+                // res.cookie('token', body.Details.AdminToken, {
+                //     expires: new Date(Date.now() + config.cookieTime),
+                //     httpOnly: true
+                // });
+                // res.redirect(webUrl);
+
+                if (body.Code == 203 || body.Code == 200) {
+                    res.cookie('username', username, {expires: new Date(Date.now() + config.cookieTime), httpOnly: true});
+                    var adminToken = '';
+                    if (body.Details) {
+                        adminToken = body.Details.AdminToken;
+                    }
+                    res.cookie('token', adminToken, {
+                        expires: new Date(Date.now() + config.cookieTime),
+                        httpOnly: true
+                    });
+                    res.redirect(config.webHost);
+                } else {
+                    console.log(body);
+                    res.send(body.Message);
+                }
+                
             });
         }
     }
