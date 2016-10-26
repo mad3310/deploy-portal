@@ -8,7 +8,7 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var common = require('../common/util.js');
 
-var config=JSON.parse(fs.readFileSync(__dirname+'/config.json'));
+var config=JSON.parse(fs.readFileSync(global.configPath));
 var route = express.Router();
 var proxy = httpProxy.createProxyServer({});
 

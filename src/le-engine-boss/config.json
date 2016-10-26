@@ -1,7 +1,7 @@
 {
   "backendHost":"https://pre-bj-core-leengine.lecloud.com",
   "webHost":"http://127.0.0.1:80",
-  "frontSrcPath":"E:\\boss\\cliptwo-130\\clip-two\\clip-two_v1.3.0\\AngularJs-Admin\\apps\\le-engine-boss",
+  "frontSrcPath":"E://frontwork//lecloud-admin//apps//le-engine-boss",
   "oauthHost":"https://oauth.lecloud.com",
   "logintoken":"pre_leengine",
   "cookieTime":9000000
