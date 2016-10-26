@@ -10,6 +10,7 @@ var route = express.Router();
 var clientId = "";
 var clientSecret = "";
 var userIp = "";
+var webUrl = config.webHost+":"+config.webPort;
 
 route.use(bodyParser.urlencoded({ extended: false }));
 route.use(bodyParser.json());
@@ -22,7 +23,7 @@ route.get('/',function(req, res, next){
 
     if(!userName && !token){//未登录
         userIp = req.ip;
-        res.redirect(config.oauthHost+"/index?redirect_uri="+config.webHost+"/identification");
+        res.redirect(config.oauthHost+"/index?redirect_uri="+webUrl+"/identification");
     }else{//已登录
         var langArray = req.acceptsLanguages(req['accept-language']);
         if(langArray && langArray.length>0){
@@ -37,7 +38,7 @@ route.get('/',function(req, res, next){
         }
 
         if(!req.query.lang){//默认语言版本
-            res.redirect(config.webHost+"/?lang="+defaultLang);
+            res.redirect(webUrl+"/?lang="+defaultLang);
         }else{
             fs.readFile(config.frontSrcPath+"/indexs/le-engine/index.ejs",function(err,data){
                 if (err) {
@@ -59,7 +60,7 @@ route.get('/',function(req, res, next){
 route.get('/identification',function(req, res, next){
     clientId = req.param('client_id');
     clientSecret = req.param('client_secret');
-    var url = config.oauthHost+"/authorize?client_id="+clientId+"&response_type=code&redirect_uri="+config.webHost+"/identification/code";
+    var url = config.oauthHost+"/authorize?client_id="+clientId+"&response_type=code&redirect_uri="+webUrl+"/identification/code";
     res.redirect(url);
 });
 
@@ -100,7 +101,7 @@ route.get('/identification/code',function(req, res, next){
                     expires: new Date(Date.now() + config.cookieTime),
                     httpOnly: true
                 });
-                res.redirect(config.webHost);
+                res.redirect(webUrl);
             });
         }
     }

@@ -1,6 +1,7 @@
 {
   "backendHost":"http://pre-bj-core-leengine.lecloud.com",
-  "webHost":"http://127.0.0.1:80",
+  "webHost":"http://127.0.0.1",
+  "webPort":"80",
   "frontSrcPath":"E:\\frontwork\\lecloud_matrix_fe\\src",
   "oauthHost":"https://oauth.lecloud.com",
   "logintoken":"pre_leengine",
