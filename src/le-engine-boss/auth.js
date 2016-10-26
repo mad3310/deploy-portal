@@ -2,6 +2,7 @@ var express = require('express');
 var request = require('request');
 var fs = require('fs');
 var ejs = require('ejs');
+var os = require('os');
 var bodyParser = require('body-parser');
 var common = require('../common/util.js');
 
@@ -11,7 +12,12 @@ var route = express.Router();
 var clientId = "";
 var clientSecret = "";
 var userIp = "";
-var webUrl = config.webHost+":"+config.webPort;
+
+if(os.type()=="Linux"){
+    var webUrl = config.webHost;
+}else{
+    var webUrl = config.webHost+":"+config.webPort;
+}
 
 route.use(bodyParser.urlencoded({ extended: false }));
 route.use(bodyParser.json());
