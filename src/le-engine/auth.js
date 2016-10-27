@@ -12,7 +12,7 @@ var clientId = "";
 var clientSecret = "";
 var userIp = "";
 
-if(os.type()=="Linux"){
+if(!/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/.test(config.webHost)){
     var webUrl = config.webHost;
 }else{
     var webUrl = config.webHost+":"+config.webPort;
