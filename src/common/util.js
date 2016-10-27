@@ -12,6 +12,21 @@ var sendHttpRequest = function(httpObj, callBack){
         );
 }
 
+var getCurrentLang = function(req){
+    var langArray = req.acceptsLanguages(req['accept-language']);
+    if(langArray && langArray.length>0){
+        var defaultLang = langArray[0].substr(0,2);
+        if(defaultLang=="en"){
+            defaultLang = 'en-us';
+        }else{
+            defaultLang = 'zh-cn';
+        }
+    }else{
+        var defaultLang = config.defaultLang;
+    }
+    return defaultLang;
+}
+
 var getCookie = function(key,req){
     if(req.headers.cookie) {
         var cookieObj = cookie.parse(req.headers.cookie);
@@ -22,3 +37,4 @@ var getCookie = function(key,req){
 
 exports.getCookie = getCookie;
 exports.sendHttpRequest = sendHttpRequest;
+exports.getCurrentLang = getCurrentLang;
