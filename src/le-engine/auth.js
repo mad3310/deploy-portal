@@ -21,6 +21,7 @@ if(/^[\D]*(\d+)\.(\d+)\.(\d+)\.(\d+)$/.test(config.webHost)){
 route.use(bodyParser.urlencoded({ extended: false }));
 route.use(bodyParser.json());
 
+
 route.get('/',function(req, res, next){
 
 
@@ -31,17 +32,7 @@ route.get('/',function(req, res, next){
         userIp = req.ip;
         res.redirect(config.oauthHost+"/index?redirect_uri="+webUrl+"/identification");
     }else{//已登录
-        var langArray = req.acceptsLanguages(req['accept-language']);
-        if(langArray && langArray.length>0){
-            var defaultLang = langArray[0].substr(0,2);
-            if(defaultLang=="en"){
-                defaultLang = 'en-us';
-            }else{
-                defaultLang = 'zh-cn';
-            }
-        }else{
-            var defaultLang = config.defaultLang;
-        }
+        var defaultLang = common.getCurrentLang(req);
 
         if(!req.query.lang){//默认语言版本
             res.redirect(webUrl+"/?lang="+defaultLang);
@@ -86,7 +77,11 @@ route.get('/identification/code',function(req, res, next){
         var email = JSON.parse(body)["email"];
         var usersource = JSON.parse(body)["usersource"];
         if(usersource!=1){
-            res.send("现阶段只允许乐视网内部用户访问，请点击内网用户登录，输入您的邮箱前缀和密码");
+            if(common.getCurrentLang(req)=='zh-cn'){
+                res.send("现阶段只允许乐视网内部用户访问，请点击内网用户登录，输入您的邮箱前缀和密码");
+            }else{
+                res.send("At this stage only to allow the user to access the music network, please click on the network user login, enter your mailbox prefix and password");
+            }
         }else {
             var httpObj = {
                 method: "post",
