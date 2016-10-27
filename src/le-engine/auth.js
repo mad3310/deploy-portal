@@ -12,10 +12,10 @@ var clientId = "";
 var clientSecret = "";
 var userIp = "";
 
-if(!/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/.test(config.webHost)){
-    var webUrl = config.webHost;
-}else{
+if(/^[\D]*(\d+)\.(\d+)\.(\d+)\.(\d+)$/.test(config.webHost)){
     var webUrl = config.webHost+":"+config.webPort;
+}else{
+    var webUrl = config.webHost;
 }
 
 route.use(bodyParser.urlencoded({ extended: false }));
