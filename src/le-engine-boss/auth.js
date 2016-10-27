@@ -13,7 +13,7 @@ var clientId = "";
 var clientSecret = "";
 var userIp = "";
 
-if(!/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/.test(config.webHost)){
+if(!/^[\D]*(\d+)\.(\d+)\.(\d+)\.(\d+)$/.test(config.webHost)){
     var webUrl = config.webHost;
 }else{
     var webUrl = config.webHost+":"+config.webPort;
