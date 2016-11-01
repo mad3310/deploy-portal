@@ -8,7 +8,7 @@ if(os.type()=="Linux"){
     global.configPath = __dirname+'/config.json';
 }
 //日志系统初始化
-var log4js = require("../common/log4js.js");
+var log4js = require("./log4js.js");
 var app = express();
 log4js.configure();
 app.use(log4js.useLog());

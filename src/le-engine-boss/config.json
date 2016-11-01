@@ -5,5 +5,13 @@
   "frontSrcPath":"E://frontwork//lecloud-admin//apps//le-engine-boss",
   "oauthHost":"https://oauth.lecloud.com",
   "logintoken":"pre_leengine",
-  "cookieTime":9000000
+  "cookieTime":9000000,
+  "logConfig":{
+    "type": "dateFile",
+    "filename": "E:\\pic\\logs\\logData.log",
+    "pattern": "-yyyy-MM-dd",
+    "alwaysIncludePattern": true,
+    "maxLogSize":2048,
+    "backups":10
+  }
 }

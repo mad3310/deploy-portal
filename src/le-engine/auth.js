@@ -5,7 +5,7 @@ var ejs = require('ejs');
 var os = require('os');
 var bodyParser = require('body-parser');
 var common = require('../common/util.js');
-var log = require("../common/log4js.js").logger("index");
+var log = require("./log4js.js").logger("index");
 
 
 var config = JSON.parse(fs.readFileSync(global.configPath));
