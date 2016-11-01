@@ -2,20 +2,13 @@
  * Created by dongwanlong on 2016/11/1.
  */
 var path = require("path");
+var fs = require("fs");
 var log4js = require("log4js");
+var config = JSON.parse(fs.readFileSync(global.configPath));
 
 exports.configure = function() {
     log4js.configure({
-        "appenders": [
-            {
-                "type": "dateFile",
-                "filename": "logs/booklist.log",
-                "pattern": "-yyyy-MM-dd",
-                "alwaysIncludePattern": true,
-                "maxLogSize":2048,
-                "backups":10
-            }
-        ]
+        "appenders": [config.logConfig]
     });
 };
 

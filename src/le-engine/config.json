@@ -6,5 +6,13 @@
   "oauthHost":"https://oauth.lecloud.com",
   "logintoken":"pre_leengine",
   "defaultLang":"zh-cn",
-  "cookieTime":90000000
+  "cookieTime":90000000,
+  "logConfig":{
+    "type": "dateFile",
+    "filename": "E:\\pic\\logs\\logData.log",
+    "pattern": "-yyyy-MM-dd",
+    "alwaysIncludePattern": true,
+    "maxLogSize":2048,
+    "backups":10
+  }
 }
