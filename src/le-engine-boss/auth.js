@@ -130,9 +130,12 @@ route.get('/user',function(req, res){
 //退出
 route.get('/user/logout',function(req, res){
     var url = config.oauthHost+"/logout?client_id="+clientId+"&client_secret="+clientSecret;
+    log.info("User Logout Url: "+url);
     request(url, function (error, response, body) {
         res.clearCookie('username');
         res.clearCookie('token');
+        log.info("Logout Response: "+response);
+        log.info("Logout Response Body: "+body);
         var obj = {
             data:{},
             callback:null,
@@ -140,6 +143,7 @@ route.get('/user/logout',function(req, res){
             alertMessage:null,
             result:1
         }
+        log.info("Logout Response Obj: "+obj);
         res.send(obj);
     });
 });
