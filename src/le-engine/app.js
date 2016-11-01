@@ -1,13 +1,13 @@
 var express = require('express');
 var fs = require('fs');
-
+//初始化配置
 var os = require('os');
 if(os.type()=="Linux"){
     global.configPath = "/usr/local/node/console/backend/console_config.json";
 }else{
     global.configPath = __dirname+'/config.json';
 }
-
+//初始化日志
 var log4js = require("./log4js.js");
 var app = express();
 log4js.configure();
