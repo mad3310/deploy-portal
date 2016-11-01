@@ -92,12 +92,20 @@ route.get('/identification/code',function(req, res, next){
             log.info("Login callBackDetailInfo httpObj :"+JSON.stringify(httpObj));
             common.sendHttpRequest(httpObj, function (body) {
                 log.info("Login callBackDetailInfo result :"+JSON.stringify(body));
-                res.cookie('username', username, {expires: new Date(Date.now() + config.cookieTime), httpOnly: true});
-                res.cookie('token', body.Details.AdminToken, {
-                    expires: new Date(Date.now() + config.cookieTime),
-                    httpOnly: true
-                });
-                res.redirect(webUrl);
+                if (body.Code == 203 || body.Code == 200) {
+                    res.cookie('username', username, {expires: new Date(Date.now() + config.cookieTime), httpOnly: true});
+                    var adminToken = '';
+                    if (body.Details) {
+                        adminToken = body.Details.AdminToken;
+                    }
+                    res.cookie('token', adminToken, {
+                        expires: new Date(Date.now() + config.cookieTime),
+                        httpOnly: true
+                    });
+                    res.redirect(webUrl);
+                } else {
+                    res.send(body.Message);
+                }
             });
         }
     }
