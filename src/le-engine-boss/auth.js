@@ -134,8 +134,8 @@ route.get('/user/logout',function(req, res){
     request(url, function (error, response, body) {
         res.clearCookie('username');
         res.clearCookie('token');
-        log.info("Logout Response: "+response);
-        log.info("Logout Response Body: "+body);
+        log.info("Logout Response: "+JSON.stringify(response));
+        log.info("Logout Response Body: "+JSON.stringify(body));
         var obj = {
             data:{},
             callback:null,
@@ -143,7 +143,7 @@ route.get('/user/logout',function(req, res){
             alertMessage:null,
             result:1
         }
-        log.info("Logout Response Obj: "+obj);
+        log.info("Logout Response Obj: "+JSON.stringify(obj));
         res.send(obj);
     });
 });
