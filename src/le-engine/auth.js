@@ -5,6 +5,8 @@ var ejs = require('ejs');
 var os = require('os');
 var bodyParser = require('body-parser');
 var common = require('../common/util.js');
+var log = require("../common/log4js.js").logger("index");
+
 
 var config = JSON.parse(fs.readFileSync(global.configPath));
 var route = express.Router();
@@ -23,13 +25,13 @@ route.use(bodyParser.json());
 
 
 route.get('/',function(req, res, next){
-
-
     var userName = common.getCookie("username",req);
     var token = common.getCookie("token",req);
 
     if(!userName && !token){//未登录
+        log.info("Login start");
         userIp = req.ip;
+        log.info("Login get url:"+config.oauthHost+"/index?redirect_uri="+webUrl+"/identification");
         res.redirect(config.oauthHost+"/index?redirect_uri="+webUrl+"/identification");
     }else{//已登录
         var defaultLang = common.getCurrentLang(req);
@@ -58,25 +60,31 @@ route.get('/identification',function(req, res, next){
     clientId = req.param('client_id');
     clientSecret = req.param('client_secret');
     var url = config.oauthHost+"/authorize?client_id="+clientId+"&response_type=code&redirect_uri="+webUrl+"/identification/code";
+    log.info("Login identification:"+url);
     res.redirect(url);
 });
 
 route.get('/identification/code',function(req, res, next){
     var code = req.param('code');
     var url = config.oauthHost+"/accesstoken?grant_type=authorization_code&code="+code+"&client_id="+clientId+"&client_secret="+clientSecret+"&redirect_uri=http://127.0.0.1/unused";
+    log.info("Login identification-code url:"+url);
     request(url, callBackAccessToken);
 
     function callBackAccessToken(error, response, body){
         var access_token = JSON.parse(body)["access_token"];
         var url = config.oauthHost+"/userdetailinfo?access_token="+access_token;
+        log.info("Login callBackAccessToken url:"+url);
         request(url, callBackDetailInfo);
     }
 
     function callBackDetailInfo(error, response, body){
+        log.info("Login callBackDetailInfo body:"+JSON.stringify(body));
+
         var username = JSON.parse(body)["username"];
         var email = JSON.parse(body)["email"];
         var usersource = JSON.parse(body)["usersource"];
         if(usersource!=1){
+            log.info("Login callBackDetailInfo usersource error :"+usersource);
             if(common.getCurrentLang(req)=='zh-cn'){
                 res.send("现阶段只允许乐视网内部用户访问，请点击内网用户登录，输入您的邮箱前缀和密码");
             }else{
@@ -96,13 +104,22 @@ route.get('/identification/code',function(req, res, next){
                     "Name": username
                 })
             };
+            log.info("Login callBackDetailInfo httpObj :"+JSON.stringify(httpObj));
             common.sendHttpRequest(httpObj, function (body) {
-                res.cookie('username', username, {expires: new Date(Date.now() + config.cookieTime), httpOnly: true});
-                res.cookie('token', body.Details.AccessToken, {
-                    expires: new Date(Date.now() + config.cookieTime),
-                    httpOnly: true
-                });
-                res.redirect(webUrl);
+                log.info("Login callBackDetailInfo result :"+JSON.stringify(body));
+                if (body.Code == 203 || body.Code == 200) {
+                    res.cookie('username', username, {
+                        expires: new Date(Date.now() + config.cookieTime),
+                        httpOnly: true
+                    });
+                    res.cookie('token', body.Details.AccessToken, {
+                        expires: new Date(Date.now() + config.cookieTime),
+                        httpOnly: true
+                    });
+                    res.redirect(webUrl);
+                }else{
+                    res.send(body.Message);
+                }
             });
         }
     }

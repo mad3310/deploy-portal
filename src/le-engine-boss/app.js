@@ -1,12 +1,17 @@
+var express = require('express');
+var fs = require('fs');
+//资源加载路径配置
 var os = require('os');
 if(os.type()=="Linux"){
     global.configPath = "/usr/local/node/boss/backend/boss_config.json";
 }else{
     global.configPath = __dirname+'/config.json';
 }
-
-var express = require('express');
-var fs = require('fs');
+//日志系统初始化
+var log4js = require("../common/log4js.js");
+var app = express();
+log4js.configure();
+app.use(log4js.useLog());
 
 var oauthRouter = require('./auth');
 var leEngineRouter = require('./api-proxy');
