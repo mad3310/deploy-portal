@@ -2,9 +2,8 @@
  * Created by dongwanlong on 2016/11/2.
  */
 var crypto = require('crypto');
-var secret='leCloud';//√‹‘ø
+var secret='leCloud';
 
-//º”√‹
 exports.encrypt = function(str){
     if(!str)return;
     var cipher = crypto.createCipher('aes192', secret);
@@ -12,7 +11,7 @@ exports.encrypt = function(str){
     enc += cipher.final('hex');
     return enc;
 };
-//Ω‚√‹
+
 exports.decrypt = function(str){
     if(!str)return;
     var decipher = crypto.createDecipher('aes192', secret);

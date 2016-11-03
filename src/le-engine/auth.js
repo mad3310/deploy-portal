@@ -6,7 +6,7 @@ var os = require('os');
 var crypto = require('../common/crypto.js');
 var bodyParser = require('body-parser');
 var common = require('../common/util.js');
-var log = require("./log4js.js").logger("index");
+var log = require("./../common/log4js.js").logger("index");
 var config = JSON.parse(fs.readFileSync(global.configPath));
 var route = express.Router();
 
