@@ -1,11 +1,12 @@
 {
   "backendHost":"https://pre-bj-core-leengine.lecloud.com",
-  "webHost":"http://127.0.0.1",
+  "webHost":"http://boss.lecloud.com",
   "webPort":"80",
   "frontSrcPath":"E://frontwork//lecloud-admin//apps//le-engine-boss",
   "oauthHost":"https://oauth.lecloud.com",
   "logintoken":"pre_leengine",
   "cookieTime":9000000,
+  "cookieDomain":"boss.lecloud.com",
   "logConfig":{
     "type": "dateFile",
     "filename": "E:\\pic\\logs\\logData.log",
