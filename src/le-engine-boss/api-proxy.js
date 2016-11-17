@@ -7,7 +7,7 @@ var fs = require('fs');
 var path = require('path');
 var bodyParser = require('body-parser');
 var common = require('../common/util.js');
-var crypto = require('../common/crypto.js');
+var crypto = require('../common/le-crypto.js');
 
 var config=JSON.parse(fs.readFileSync(global.configPath));
 var route = express.Router();

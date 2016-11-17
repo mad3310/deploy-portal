@@ -1,7 +1,7 @@
 var request = require('request');
 var cookie = require('cookie');
 var fs = require('fs');
-var crypto = require('../common/crypto.js');
+var crypto = require('./le-crypto.js');
 var config = JSON.parse(fs.readFileSync(global.configPath));
 
 
@@ -32,7 +32,7 @@ var getCurrentLang = function(req){
 }
 
 var getCookie = function(key,req){
-    if(req.headers.cookie && config.webHost.indexOf(req.headers.host)!=-1) {
+    if(req.headers.cookie) {
         var cookieObj = cookie.parse(req.headers.cookie);
         if(!cookieObj[key])return "";
         return cookieObj[key];

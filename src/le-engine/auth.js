@@ -3,10 +3,10 @@ var request = require('request');
 var fs = require('fs');
 var ejs = require('ejs');
 var os = require('os');
-var crypto = require('../common/crypto.js');
+var crypto = require('../common/le-crypto.js');
 var bodyParser = require('body-parser');
 var common = require('../common/util.js');
-var log = require("./../common/log4js.js").logger("index");
+var log = require("./../common/le-log4js.js").logger("index");
 var config = JSON.parse(fs.readFileSync(global.configPath));
 var route = express.Router();
 
@@ -73,8 +73,8 @@ route.get('/identification/code',function(req, res, next){
     var clientId = common.getCookie("clientId",req);
     var clientSecret = common.getCookie("clientSecret",req);
     var userIp = common.getCookie("userIp",req);
-
     var code = req.param('code');
+
     var url = config.oauthHost+"/accesstoken?grant_type=authorization_code&code="+code+"&client_id="+clientId+"&client_secret="+clientSecret+"&redirect_uri=http://127.0.0.1/unused";
     log.info("Login identification-code url:"+url);
     request(url, callBackAccessToken);

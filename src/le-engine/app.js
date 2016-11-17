@@ -9,7 +9,7 @@ if(os.type()=="Linux"){
 }
 
 //初始化日志
-var log4js = require("./../common/log4js.js");
+var log4js = require("./../common/le-log4js.js");
 var app = express();
 log4js.configure();
 app.use(log4js.useLog());
