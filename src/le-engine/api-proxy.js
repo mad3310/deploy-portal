@@ -31,8 +31,6 @@ function leEngineCallBack(req, res){
     var userName = crypto.decrypt(common.getCookie("username",req));
     var token = crypto.decrypt(common.getCookie("token",req));
 
-    var pathName = req.pathname;
-
     var httpObj = {
         method: req.method,
         uri: config.backendHost + req.originalUrl,

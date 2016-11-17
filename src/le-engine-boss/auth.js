@@ -89,6 +89,7 @@ route.get('/identification/code',function(req, res, next){
         var username = JSON.parse(body)["username"];
         var email = JSON.parse(body)["email"];
         var usersource = JSON.parse(body)["usersource"];
+
         if(usersource!=1){
             res.send("现阶段只允许乐视网内部用户访问，请点击内网用户登录，输入您的邮箱前缀和密码");
         }else {
