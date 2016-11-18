@@ -7,6 +7,7 @@ var fs = require('fs');
 var path = require('path');
 var bodyParser = require('body-parser');
 var common = require('../common/util.js');
+var crypto = require('../common/le-crypto.js');
 
 var config=JSON.parse(fs.readFileSync(global.configPath));
 var route = express.Router();
@@ -27,9 +28,8 @@ route.use(function (req, res, next) {
 
 
 function leEngineCallBack(req, res){
-    var userName = common.getCookie("username",req);
-    var token = common.getCookie("token",req);
-    var pathName = req.pathname;
+    var userName = crypto.decrypt(common.getCookie("username",req));
+    var token = crypto.decrypt(common.getCookie("token",req));
 
     var httpObj = {
         method: req.method,
