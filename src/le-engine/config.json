@@ -1,10 +1,11 @@
 {
-  "backendHost":"http://10.11.147.153:8080",
+  "backendHost":"https://pre-bj-core-leengine.lecloud.com",
   "webHost":"http://console.lecloud.com",
+  "registryHost":"http://registry.lecloud.com",
   "webPort":"80",
   "frontSrcPath":"E:\\frontwork\\lecloud_matrix_fe\\src",
   "oauthHost":"https://oauth.lecloud.com",
-  "logintoken":"cloud_leengine",
+  "logintoken":"pre_leengine",
   "defaultLang":"zh-cn",
   "cookieTime":90000000,
   "cookieDomain":"console.lecloud.com",
