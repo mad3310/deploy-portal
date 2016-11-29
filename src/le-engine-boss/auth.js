@@ -138,16 +138,29 @@ route.get('/identification/code',function(req, res, next){
 route.get('/user',function(req, res){
     var userName = crypto.decrypt(common.getCookie("username",req));
     var token = crypto.decrypt(common.getCookie("token",req));
-    var obj = {
-        data:{
-            "username":userName
-        },
-        callback:null,
-        msgs:[],
-        alertMessage:null,
-        result:1
-    }
-    res.send(obj);
+
+    var httpObj = {
+        method: "get",
+        uri: config.backendHost + '/v1/cloud/users?username='+userName,
+        headers: {
+            "username": userName,
+            "accesstoken":token,
+        }
+    };
+    common.sendHttpRequest(httpObj, function (body) {
+        var obj = {
+            data:body.Details,
+            callback:null,
+            msgs:[],
+            alertMessage:null,
+            result:1
+        }
+        if (body.Code == 203 || body.Code == 200) {
+            res.send(obj);
+        }else{
+            res.send(body.Message);
+        }
+    });
 });
 
 //退出
@@ -159,8 +172,8 @@ route.get('/user/logout',function(req, res){
         alertMessage:null,
         result:1
     }
-    res.clearCookie('username');
-    res.clearCookie('token');
+    res.clearCookie('username',{domain:config.cookieDomain});
+    res.clearCookie('token',{domain:config.cookieDomain});
     res.send(obj);
 });
 

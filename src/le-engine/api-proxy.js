@@ -46,8 +46,7 @@ function leEngineCallBack(req, res){
             callback: null,
             msgs: [],
             alertMessage: null,
-            cookieLost:(!userName||!token)?1:0,
-            result: 1
+            result: (!userName||!token)?2:1
         }
         res.send(obj);
     });
