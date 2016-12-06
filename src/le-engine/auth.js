@@ -158,7 +158,7 @@ route.get('/user',function(req, res){
     };
     common.sendHttpRequest(httpObj, function (body) {
         var obj = {
-            data:body.Details,
+            data:body,
             callback:null,
             msgs:[],
             alertMessage:null,
