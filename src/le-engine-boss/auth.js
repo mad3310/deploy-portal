@@ -141,10 +141,10 @@ route.get('/user',function(req, res){
 
     var httpObj = {
         method: "get",
-        uri: config.backendHost + '/v1/cloud/users?username='+userName,
+        uri: config.backendHost + '/v1/admin/users/info?username='+userName,
         headers: {
             "username": userName,
-            "accesstoken":token,
+            "admintoken":token,
         }
     };
     common.sendHttpRequest(httpObj, function (body) {
