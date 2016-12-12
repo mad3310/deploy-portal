@@ -121,6 +121,7 @@ route.get('/identification/code',function(req, res, next){
                 common.setCookie(res,'username', username);
                 common.setCookie(res,'token', adminToken);
 
+                var url = config.oauthHost+"/logout?client_id="+clientId+"&client_secret="+clientSecret;
                 request(url, function (error, response, body) {
                     log.info("Logout oauth httpObj success!");
                 });
